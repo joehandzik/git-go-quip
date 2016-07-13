@@ -15,3 +15,4 @@ GITHUB_TOKEN - an authentication token for interacting with your GitHub account,
 I'll keep a running update of what works as I remember to.
 
 Works: list-quip
+       list-github
