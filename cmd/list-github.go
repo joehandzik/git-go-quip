@@ -22,8 +22,9 @@ package cmd
 
 import (
 	"fmt"
-
 	"github.com/spf13/cobra"
+        "github.com/google/go-github/github"
+        "golang.org/x/oauth2"
 )
 
 // list-githubCmd represents the list-github command
@@ -31,8 +32,19 @@ var list_githubCmd = &cobra.Command{
 	Use:   "list-github",
 	Short: "A brief description of your command",
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		fmt.Println("list-github called")
+                github_token, _ := cmd.Flags().GetString("github-token")
+
+                token_source := oauth2.StaticTokenSource(
+                                  &oauth2.Token{AccessToken: github_token})
+                token_client := oauth2.NewClient(oauth2.NoContext, token_source)
+
+                github_client := github.NewClient(token_client)
+
+                repos, _, _ := github_client.Repositories.List("", nil)
+
+                for index, repo := range repos {
+                    fmt.Printf("Repo %d: %s\n", index, *repo.FullName)
+		}
 	},
 }
 
